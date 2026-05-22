@@ -373,9 +373,12 @@
             const { width, height } =
                 oldPage.getSize();
 
-            // RESPONSIVE HEADER/FOOTER HEIGHT
-            const headerFooterHeight =
-                Math.max(width * 0.065, 55);
+// FOOTER HEIGHT (KEEP SAME)
+const footerHeight = 60;
+
+// HEADER HEIGHT (BIGGER FOR MOBILE)
+const headerHeight =
+    Math.max(width * 0.09, 85);
 
             const newPage =
                 newPdf.addPage([width, height]);
@@ -395,29 +398,29 @@
                 height: height
             });
 
-            // HEADER (KEEP ASPECT RATIO)
-            newPage.drawImage(headerImage, {
+// HEADER FIXED FOR MOBILE
+newPage.drawImage(headerImage, {
 
-                x: 0,
+    x: 0,
 
-                y: height - headerFooterHeight,
+    y: height - headerHeight,
 
-                width: width,
+    width: width,
 
-                height: headerFooterHeight
-            });
+    height: headerHeight
+});
 
-            // FOOTER (KEEP ASPECT RATIO)
-            newPage.drawImage(footerImage, {
+// FOOTER (UNCHANGED)
+newPage.drawImage(footerImage, {
 
-                x: 0,
+    x: 0,
 
-                y: 0,
+    y: 0,
 
-                width: width,
+    width: width,
 
-                height: headerFooterHeight
-            });
+    height: footerHeight
+});
 
             // PAGE NUMBER
             newPage.drawText(`Page ${i + 1}`, {
