@@ -220,7 +220,8 @@
 
             <div class="upload-icon">
                 <svg viewBox="0 0 24 24">
-                    <path d="M19.35 10.04C18.67 6.59 15.64 4 12 4 9.11 4 6.6 5.64 5.35 8.04 2.34 8.36 0 10.91 0 14c0 3.31 2.69 6 6 6h13c2.76 0 5-2.24 5-5 0-2.64-2.05-4.78-4.65-4.96zM14 13v4h-4v-4H7l5-5 5 5h-3z"/>
+                    <path
+                        d="M19.35 10.04C18.67 6.59 15.64 4 12 4 9.11 4 6.6 5.64 5.35 8.04 2.34 8.36 0 10.91 0 14c0 3.31 2.69 6 6 6h13c2.76 0 5-2.24 5-5 0-2.64-2.05-4.78-4.65-4.96zM14 13v4h-4v-4H7l5-5 5 5h-3z" />
                 </svg>
             </div>
 
@@ -234,10 +235,7 @@
 
         </label>
 
-        <input type="file"
-               id="pdfUpload"
-               accept=".pdf"
-               onchange="updateFileInputLabel()">
+        <input type="file" id="pdfUpload" accept=".pdf" onchange="updateFileInputLabel()">
 
         <button onclick="processPDF()">
             Download Updated PDF
@@ -306,7 +304,7 @@
                         return await pdfDoc.embedJpg(bytes);
                     }
 
-                } catch (e) {}
+                } catch (e) { }
             }
 
             throw new Error(
@@ -369,8 +367,8 @@
                     const { width, height } =
                         oldPage.getSize();
 
-                    // PERFECT HEADER/FOOTER HEIGHT
-                    const headerFooterHeight = 60;
+                   // Responsive Header/Footer Height
+const headerFooterHeight = width * 0.09;
 
                     const newPage =
                         newPdf.addPage([width, height]);
@@ -378,40 +376,40 @@
                     const embeddedPage =
                         await newPdf.embedPage(oldPage);
 
-// Main PDF Content (Move Up Without Shrinking)
+                    // Main PDF Content (Move Up Without Shrinking)
+                    // Main PDF Content (Responsive Perfect Alignment)
 newPage.drawPage(embeddedPage, {
 
     x: 0,
 
-    y: 35,
+    y: headerFooterHeight - 20,
 
     width: width,
 
     height: height
 });
-                    // HEADER
-                    newPage.drawImage(headerImage, {
+                   // Responsive Header
+newPage.drawImage(headerImage, {
 
-                        x: 0,
+    x: 0,
 
-                        y: height - headerFooterHeight,
+    y: height - headerFooterHeight,
 
-                        width: width,
+    width: width,
 
-                        height: headerFooterHeight
-                    });
+    height: headerFooterHeight
+});
+// Responsive Footer
+newPage.drawImage(footerImage, {
 
-                    // FOOTER
-                    newPage.drawImage(footerImage, {
+    x: 0,
 
-                        x: 0,
+    y: 0,
 
-                        y: 0,
+    width: width,
 
-                        width: width,
-
-                        height: headerFooterHeight
-                    });
+    height: headerFooterHeight
+});
 
                     // Page Number
                     newPage.drawText(`Page ${i + 1}`, {
