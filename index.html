@@ -2,15 +2,17 @@
 <html>
 
 <head>
-    <title>PDF Header Footer Tool</title>
+    <title>Responsive PDF Header/Footer Tool</title>
+
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
     <script src="https://unpkg.com/pdf-lib/dist/pdf-lib.min.js"></script>
 
     <style>
         body {
             margin: 0;
-            font-family: 'Segoe UI', -apple-system, BlinkMacSystemFont, Roboto, sans-serif;
-            background: radial-gradient(circle at top right, #f4f8fc 0%, #e5eef9 100%);
+            font-family: 'Segoe UI', sans-serif;
+            background: linear-gradient(135deg, #eef4ff, #f4f7fb);
             min-height: 100vh;
             display: flex;
             align-items: center;
@@ -21,7 +23,7 @@
 
         .container {
             width: 100%;
-            max-width: 480px;
+            max-width: 750px;
             background: #ffffff;
             padding: 45px 35px;
             border-radius: 28px;
@@ -30,12 +32,11 @@
                 0 4px 12px rgba(0, 0, 0, 0.02);
             text-align: center;
             box-sizing: border-box;
-            border: 1px solid rgba(229, 238, 249, 0.8);
         }
 
         .logo {
             width: 100%;
-            max-width: 200px;
+            max-width: 220px;
             height: auto;
             margin-bottom: 24px;
             object-fit: contain;
@@ -44,133 +45,159 @@
         h2 {
             margin: 0 0 12px;
             color: #ab0ca3;
-            font-size: 24px;
+            font-size: 32px;
             font-weight: 700;
-            letter-spacing: -0.5px;
+            line-height: 1.4;
         }
 
         .info {
-            font-size: 14px;
+            font-size: 15px;
             color: #627d98;
-            margin-bottom: 30px;
-            line-height: 1.5;
+            margin-bottom: 35px;
+            line-height: 1.7;
         }
 
-        /* CUSTOM FILE UPLOAD BLOCK */
+        /* Upload Box */
         .upload-label {
             display: flex;
             flex-direction: column;
             align-items: center;
             justify-content: center;
             width: 100%;
-            padding: 32px 20px;
+            padding: 40px 25px;
             border: 2px dashed #bac7d5;
-            border-radius: 18px;
+            border-radius: 22px;
             background: #f8fafc;
             cursor: pointer;
             box-sizing: border-box;
-            transition: all 0.25s ease;
-            margin-bottom: 24px;
+            transition: 0.3s ease;
+            margin-bottom: 28px;
         }
 
         .upload-label:hover {
-            border-color: #1d70b8;
-            background: #f0f5fa;
-            transform: translateY(-1px);
+            border-color: #ab0ca3;
+            background: #f4f7ff;
+            transform: translateY(-2px);
         }
 
         .upload-icon {
-            width: 42px;
-            height: 42px;
-            background: #e6effa;
+            width: 60px;
+            height: 60px;
+            background: #eef3ff;
             border-radius: 50%;
             display: flex;
             align-items: center;
             justify-content: center;
-            margin-bottom: 12px;
-            transition: background 0.25s ease;
-        }
-
-        .upload-label:hover .upload-icon {
-            background: #1d70b8;
+            margin-bottom: 15px;
         }
 
         .upload-icon svg {
-            width: 20px;
-            height: 20px;
-            fill: #1d70b8;
-            transition: fill 0.25s ease;
-        }
-
-        .upload-label:hover .upload-icon svg {
-            fill: #ffffff;
+            width: 28px;
+            height: 28px;
+            fill: #ab0ca3;
         }
 
         .upload-text {
-            font-size: 14px;
-            font-weight: 600;
-            color: #486581;
+            font-size: 18px;
+            font-weight: 700;
+            color: #34495e;
             margin: 0;
         }
 
         .upload-subtext {
-            font-size: 12px;
-            color: #829ab1;
-            margin: 4px 0 0;
+            font-size: 14px;
+            color: #7f8c8d;
+            margin-top: 8px;
         }
 
         input[type="file"] {
             display: none;
         }
 
-        /* BUTTON ACTION */
+        /* Button */
         button {
             width: 100%;
-            padding: 16px;
-            background: #ab0ca3;
-            color: #ffffff;
+            padding: 20px;
+            background: linear-gradient(135deg, #ab0ca3, #7f0a79);
+            color: white;
             border: none;
-            border-radius: 16px;
-            font-size: 16px;
-            font-weight: 600;
+            border-radius: 20px;
+            font-size: 18px;
+            font-weight: 700;
             cursor: pointer;
-            transition: all 0.25s ease;
-            box-shadow: 0 8px 20px rgba(15, 76, 129, 0.2);
+            transition: 0.3s ease;
+            box-shadow: 0 10px 25px rgba(171, 12, 163, 0.25);
         }
 
         button:hover {
-            background: #1d70b8;
             transform: translateY(-2px);
-            box-shadow: 0 12px 24px rgba(29, 112, 184, 0.3);
+            box-shadow: 0 15px 35px rgba(171, 12, 163, 0.35);
         }
 
         button:active {
-            transform: scale(0.99);
+            transform: scale(0.98);
         }
 
-        /* RESPONSIVE LAYOUT CONFIGURATIONS */
-        @media (max-width: 600px) {
+        /* Mobile Responsive */
+        @media screen and (max-width: 768px) {
+
             body {
-                padding: 16px;
+                padding: 18px;
             }
 
             .container {
                 max-width: 100%;
-                padding: 35px 24px;
-                border-radius: 24px;
+                padding: 50px 35px;
+                border-radius: 32px;
+            }
+
+            .logo {
+                max-width: 180px;
             }
 
             h2 {
-                font-size: 21px;
+                font-size: 34px;
             }
 
             .info {
-                font-size: 13px;
-                margin-bottom: 24px;
+                font-size: 16px;
             }
 
             .upload-label {
-                padding: 24px 16px;
+                padding: 35px 20px;
+            }
+
+            .upload-text {
+                font-size: 20px;
+            }
+
+            button {
+                padding: 22px;
+                font-size: 20px;
+            }
+        }
+
+        @media screen and (max-width: 480px) {
+
+            .container {
+                padding: 45px 28px;
+            }
+
+            .logo {
+                max-width: 160px;
+            }
+
+            h2 {
+                font-size: 28px;
+            }
+
+            .upload-text {
+                font-size: 18px;
+            }
+
+            button {
+                padding: 20px;
+                font-size: 18px;
             }
         }
     </style>
@@ -183,163 +210,264 @@
         <img src="lifecare.png" alt="Lifecare Logo" class="logo">
 
         <h2>Lifecare Diagnostic Centre</h2>
-        
+
         <div class="info">
-            Upload a local document to systematically attach authentic Lifecare header and footer imagery configurations.
+            Upload your PDF report to automatically add Lifecare Header & Footer professionally.
         </div>
 
+        <!-- Upload Area -->
         <label for="pdfUpload" class="upload-label">
+
             <div class="upload-icon">
                 <svg viewBox="0 0 24 24">
                     <path d="M19.35 10.04C18.67 6.59 15.64 4 12 4 9.11 4 6.6 5.64 5.35 8.04 2.34 8.36 0 10.91 0 14c0 3.31 2.69 6 6 6h13c2.76 0 5-2.24 5-5 0-2.64-2.05-4.78-4.65-4.96zM14 13v4h-4v-4H7l5-5 5 5h-3z"/>
                 </svg>
             </div>
-            <p class="upload-text" id="file-name-text">Choose PDF File</p>
-            <p class="upload-subtext" id="file-size-text">or drag and drop here</p>
-        </label>
-        
-        <input type="file" id="pdfUpload" accept=".pdf" onchange="updateFileInputLabel()">
 
-        <button onclick="processPDF()">Download Updated PDF</button>
+            <p class="upload-text" id="file-name-text">
+                Choose PDF File
+            </p>
+
+            <p class="upload-subtext" id="file-size-text">
+                Drag & Drop PDF Here
+            </p>
+
+        </label>
+
+        <input type="file"
+               id="pdfUpload"
+               accept=".pdf"
+               onchange="updateFileInputLabel()">
+
+        <button onclick="processPDF()">
+            Download Updated PDF
+        </button>
+
     </div>
 
     <script>
+
         function updateFileInputLabel() {
+
             const fileInput = document.getElementById('pdfUpload');
             const nameDisplay = document.getElementById('file-name-text');
             const sizeDisplay = document.getElementById('file-size-text');
-            
+
             if (fileInput.files.length > 0) {
+
                 const selectedFile = fileInput.files[0];
+
                 nameDisplay.textContent = selectedFile.name;
-                nameDisplay.style.color = "#0f4c81";
-                
-                const sizeInMB = (selectedFile.size / (1024 * 1024)).toFixed(2);
-                sizeDisplay.textContent = `${sizeInMB} MB - Ready to Process`;
+
+                const sizeInMB =
+                    (selectedFile.size / (1024 * 1024)).toFixed(2);
+
+                sizeDisplay.textContent =
+                    `${sizeInMB} MB • Ready to Process`;
+
             } else {
+
                 nameDisplay.textContent = "Choose PDF File";
-                nameDisplay.style.color = "#486581";
-                sizeDisplay.textContent = "or drag and drop here";
+
+                sizeDisplay.textContent = "Drag & Drop PDF Here";
             }
         }
 
-        // Smart asset loader that checks both extensions and matches the right decoder natively
+        // Auto Detect Image Format
         async function loadAssetSafe(pdfDoc, baseName) {
-            const extensions = ['.png', '.PNG', '.jpeg', '.JPEG', '.jpg', '.JPG'];
-            let lastError = null;
+
+            const extensions = [
+                '.png',
+                '.PNG',
+                '.jpeg',
+                '.JPEG',
+                '.jpg',
+                '.JPG'
+            ];
 
             for (const ext of extensions) {
+
                 try {
-                    const response = await fetch(baseName + ext);
-                    if (!response.ok) continue; 
-                    
-                    const bytes = await response.arrayBuffer();
-                    
-                    // Force PNG embedding for PNG paths, JPEG for others
+
+                    const response =
+                        await fetch(baseName + ext);
+
+                    if (!response.ok) continue;
+
+                    const bytes =
+                        await response.arrayBuffer();
+
                     if (ext.toLowerCase() === '.png') {
+
                         return await pdfDoc.embedPng(bytes);
+
                     } else {
+
                         return await pdfDoc.embedJpg(bytes);
                     }
-                } catch (err) {
-                    lastError = err;
-                }
+
+                } catch (e) {}
             }
-            throw new Error(`Could not find or process "${baseName}" with any standard image extension. Ensure the file is inside your project directory.`);
+
+            throw new Error(
+                `${baseName} image not found`
+            );
         }
 
         async function processPDF() {
+
             try {
-                const fileInput = document.getElementById('pdfUpload');
+
+                const fileInput =
+                    document.getElementById('pdfUpload');
 
                 if (!fileInput.files.length) {
-                    alert("Upload PDF first");
+
+                    alert("Please upload PDF first");
                     return;
                 }
 
                 const file = fileInput.files[0];
-                const arrayBuffer = await file.arrayBuffer();
 
-                const pdfDoc = await PDFLib.PDFDocument.load(arrayBuffer);
+                const arrayBuffer =
+                    await file.arrayBuffer();
+
+                const pdfDoc =
+                    await PDFLib.PDFDocument.load(arrayBuffer);
+
                 const pages = pdfDoc.getPages();
 
-                const newPdf = await PDFLib.PDFDocument.create();
+                const newPdf =
+                    await PDFLib.PDFDocument.create();
 
-                // Seamlessly try multiple case variations and extension types
-                let headerImage, footerImage;
+                // Header Loader
+                let headerImage;
+
                 try {
-                    headerImage = await loadAssetSafe(newPdf, 'header');
-                } catch(e) {
-                    headerImage = await loadAssetSafe(newPdf, 'Header');
+                    headerImage =
+                        await loadAssetSafe(newPdf, 'header');
+                } catch (e) {
+                    headerImage =
+                        await loadAssetSafe(newPdf, 'Header');
                 }
 
+                // Footer Loader
+                let footerImage;
+
                 try {
-                    footerImage = await loadAssetSafe(newPdf, 'footer');
-                } catch(e) {
-                    footerImage = await loadAssetSafe(newPdf, 'Footer');
+                    footerImage =
+                        await loadAssetSafe(newPdf, 'footer');
+                } catch (e) {
+                    footerImage =
+                        await loadAssetSafe(newPdf, 'Footer');
                 }
 
                 for (let i = 0; i < pages.length; i++) {
+
                     const oldPage = pages[i];
-                    const { width, height } = oldPage.getSize();
 
-                    // Scaled exactly for your 1600 x 533 images aspect ratio
-                    const assetAspectRatio = 533 / 1600;
-                    const computedImageHeight = width * assetAspectRatio;
+                    const { width, height } =
+                        oldPage.getSize();
 
-                    const newPage = newPdf.addPage([width, height]);
-                    const embeddedPage = await newPdf.embedPage(oldPage);
+                    // PERFECT HEADER/FOOTER HEIGHT
+                    const headerFooterHeight = 60;
 
-                    newPage.drawPage(embeddedPage, {
-                        x: 0,
-                        y: 0,
-                        width: width,
-                        height: height
-                    });
+                    const newPage =
+                        newPdf.addPage([width, height]);
 
-                    // Top Edge Alignment
+                    const embeddedPage =
+                        await newPdf.embedPage(oldPage);
+
+// Main PDF Content (Move Up Without Shrinking)
+newPage.drawPage(embeddedPage, {
+
+    x: 0,
+
+    y: 35,
+
+    width: width,
+
+    height: height
+});
+                    // HEADER
                     newPage.drawImage(headerImage, {
+
                         x: 0,
-                        y: height - computedImageHeight,
+
+                        y: height - headerFooterHeight,
+
                         width: width,
-                        height: computedImageHeight
+
+                        height: headerFooterHeight
                     });
 
-                    // Bottom Edge Alignment
+                    // FOOTER
                     newPage.drawImage(footerImage, {
+
                         x: 0,
+
                         y: 0,
+
                         width: width,
-                        height: computedImageHeight
+
+                        height: headerFooterHeight
                     });
 
-                    // Pagination Placement safely above the dynamic footer area
+                    // Page Number
                     newPage.drawText(`Page ${i + 1}`, {
-                        x: width - 75,
-                        y: computedImageHeight + 15,
+
+                        x: width - 70,
+
+                        y: 25,
+
                         size: 9,
-                        color: PDFLib.rgb(0.3, 0.3, 0.3)
+
+                        color:
+                            PDFLib.rgb(0.3, 0.3, 0.3)
                     });
                 }
-                
-                const pdfBytes = await newPdf.save();
-                const blob = new Blob([pdfBytes], { type: "application/pdf" });
-                const url = URL.createObjectURL(blob);
 
-                const a = document.createElement("a");
+                // Save PDF
+                const pdfBytes = await newPdf.save();
+
+                const blob = new Blob(
+                    [pdfBytes],
+                    { type: "application/pdf" }
+                );
+
+                const url =
+                    URL.createObjectURL(blob);
+
+                const a =
+                    document.createElement("a");
+
                 a.href = url;
-                const originalFileName = file.name.replace('.pdf', '');
-                a.download = originalFileName + '_updated.pdf';
+
+                const originalFileName =
+                    file.name.replace('.pdf', '');
+
+                a.download =
+                    originalFileName + '_updated.pdf';
+
                 document.body.appendChild(a);
+
                 a.click();
+
                 document.body.removeChild(a);
 
             } catch (error) {
+
                 console.error(error);
-                alert("Error processing PDF: " + error.message);
+
+                alert(
+                    "Error processing PDF: " +
+                    error.message
+                );
             }
         }
+
     </script>
+
 </body>
 
 </html>
