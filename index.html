@@ -223,6 +223,31 @@
             }
         }
 
+        // Smart asset loader that checks both extensions and matches the right decoder natively
+        async function loadAssetSafe(pdfDoc, baseName) {
+            const extensions = ['.png', '.PNG', '.jpeg', '.JPEG', '.jpg', '.JPG'];
+            let lastError = null;
+
+            for (const ext of extensions) {
+                try {
+                    const response = await fetch(baseName + ext);
+                    if (!response.ok) continue; 
+                    
+                    const bytes = await response.arrayBuffer();
+                    
+                    // Force PNG embedding for PNG paths, JPEG for others
+                    if (ext.toLowerCase() === '.png') {
+                        return await pdfDoc.embedPng(bytes);
+                    } else {
+                        return await pdfDoc.embedJpg(bytes);
+                    }
+                } catch (err) {
+                    lastError = err;
+                }
+            }
+            throw new Error(`Could not find or process "${baseName}" with any standard image extension. Ensure the file is inside your project directory.`);
+        }
+
         async function processPDF() {
             try {
                 const fileInput = document.getElementById('pdfUpload');
@@ -240,25 +265,31 @@
 
                 const newPdf = await PDFLib.PDFDocument.create();
 
-                const headerBytes = await fetch('Header.png').then(res => res.arrayBuffer());
-                const headerImage = await newPdf.embedPng(headerBytes);
+                // Seamlessly try multiple case variations and extension types
+                let headerImage, footerImage;
+                try {
+                    headerImage = await loadAssetSafe(newPdf, 'header');
+                } catch(e) {
+                    headerImage = await loadAssetSafe(newPdf, 'Header');
+                }
 
-                const footerBytes = await fetch('footer.png').then(res => res.arrayBuffer());
-                const footerImage = await newPdf.embedPng(footerBytes);
+                try {
+                    footerImage = await loadAssetSafe(newPdf, 'footer');
+                } catch(e) {
+                    footerImage = await loadAssetSafe(newPdf, 'Footer');
+                }
 
                 for (let i = 0; i < pages.length; i++) {
                     const oldPage = pages[i];
                     const { width, height } = oldPage.getSize();
 
-                    // Calculate perfect height based on asset aspect ratio (595:100)
-                    const assetAspectRatio = 100 / 595;
+                    // Scaled exactly for your 1600 x 533 images aspect ratio
+                    const assetAspectRatio = 533 / 1600;
                     const computedImageHeight = width * assetAspectRatio;
 
-                    // Re-instantiate the same workspace boundaries
                     const newPage = newPdf.addPage([width, height]);
                     const embeddedPage = await newPdf.embedPage(oldPage);
 
-                    // Draw the core document page under the header and above the footer
                     newPage.drawPage(embeddedPage, {
                         x: 0,
                         y: 0,
@@ -266,7 +297,7 @@
                         height: height
                     });
 
-                    // Draw Header flushed to the top edge
+                    // Top Edge Alignment
                     newPage.drawImage(headerImage, {
                         x: 0,
                         y: height - computedImageHeight,
@@ -274,7 +305,7 @@
                         height: computedImageHeight
                     });
 
-                    // Draw Footer flushed to the bottom edge
+                    // Bottom Edge Alignment
                     newPage.drawImage(footerImage, {
                         x: 0,
                         y: 0,
@@ -282,7 +313,7 @@
                         height: computedImageHeight
                     });
 
-                    // Adjust page numbers elegantly over the right side edge
+                    // Pagination Placement safely above the dynamic footer area
                     newPage.drawText(`Page ${i + 1}`, {
                         x: width - 75,
                         y: computedImageHeight + 15,
